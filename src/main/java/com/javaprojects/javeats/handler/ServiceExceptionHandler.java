@@ -1,7 +1,7 @@
-package com.javaprojects.javeats.handlers;
+package com.javaprojects.javeats.handler;
 
-import com.javaprojects.javeats.exceptions.DuplicationValueException;
-import com.javaprojects.javeats.exceptions.ParameterNotFoundException;
+import com.javaprojects.javeats.exception.DuplicationValueException;
+import com.javaprojects.javeats.exception.ParameterNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

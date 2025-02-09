@@ -1,4 +1,4 @@
-package com.javaprojects.javeats.exceptions;
+package com.javaprojects.javeats.exception;
 
 public class ParameterNotFoundException extends Exception{
 
