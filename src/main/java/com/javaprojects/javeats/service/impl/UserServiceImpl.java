@@ -1,5 +1,6 @@
 package com.javaprojects.javeats.service.impl;
 
+import com.javaprojects.javeats.dto.RegisterRequest;
 import com.javaprojects.javeats.entity.Users;
 import com.javaprojects.javeats.exception.*;
 import com.javaprojects.javeats.repository.UserRepository;
@@ -16,10 +17,19 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void registerUser(Users user)  throws ParameterNotFoundException, DuplicationValueException{
+    public void registerUser(RegisterRequest request)  throws ParameterNotFoundException, DuplicationValueException{
 
-        validateRegistrationData(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        validateRegistrationData(request);
+        var user = Users.builder()
+                        .username(request.getUsername())
+                        .email(request.getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .isEnabled(true)
+                        .isAccountNonExpired(true)
+                        .isAccountNonLocked(true)
+                        .isCredentialsNonExpired(true)
+                        .build();
+
         userRepository.save(user);
     }
 
@@ -28,15 +38,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private void validateRegistrationData(Users user) throws ParameterNotFoundException, DuplicationValueException {
-        if(Optional.ofNullable(user.getUsername()).isEmpty())
+    private void validateRegistrationData(RegisterRequest request) throws ParameterNotFoundException, DuplicationValueException {
+        if(Optional.ofNullable(request.getUsername()).isEmpty())
             throw new ParameterNotFoundException("Username");
-        if(Optional.ofNullable(user.getEmail()).isEmpty())
+        if(Optional.ofNullable(request.getEmail()).isEmpty())
             throw new ParameterNotFoundException("Email");
-        if(Optional.ofNullable(user.getPassword()).isEmpty())
+        if(Optional.ofNullable(request.getPassword()).isEmpty())
             throw new ParameterNotFoundException("Password");
 
-        Optional<Users> users = userRepository.findByEmail(user.getEmail());
+        Optional<Users> users = userRepository.findByEmail(request.getEmail());
 
         if(users.isPresent())
             throw new DuplicationValueException("Email");
