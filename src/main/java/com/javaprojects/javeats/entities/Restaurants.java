@@ -1,4 +1,4 @@
-package com.javaprojects.javeats.entity;
+package com.javaprojects.javeats.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

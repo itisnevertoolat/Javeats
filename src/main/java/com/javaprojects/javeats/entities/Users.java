@@ -1,4 +1,4 @@
-package com.javaprojects.javeats.entity;
+package com.javaprojects.javeats.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +26,10 @@ public class Users implements UserDetails {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
+    @Override
+    public String getUsername(){
+        return  email;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

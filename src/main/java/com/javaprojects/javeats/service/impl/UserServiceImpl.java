@@ -1,11 +1,16 @@
 package com.javaprojects.javeats.service.impl;
 
+import com.javaprojects.javeats.dto.LoginRequest;
 import com.javaprojects.javeats.dto.RegisterRequest;
-import com.javaprojects.javeats.entity.Users;
+import com.javaprojects.javeats.entities.Users;
 import com.javaprojects.javeats.exception.*;
 import com.javaprojects.javeats.repository.UserRepository;
 import com.javaprojects.javeats.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -15,6 +20,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public void registerUser(RegisterRequest request)  throws ParameterNotFoundException, DuplicationValueException{
@@ -34,8 +40,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void loginUser(Users users) throws ParameterNotFoundException {
-
+    public Users loginUser(LoginRequest request) throws ParameterNotFoundException {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        return userRepository.findByEmail(request.getEmail()).orElseThrow();
     }
 
     private void validateRegistrationData(RegisterRequest request) throws ParameterNotFoundException, DuplicationValueException {

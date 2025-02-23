@@ -1,6 +1,6 @@
 package com.javaprojects.javeats.repository;
 
-import com.javaprojects.javeats.entity.Users;
+import com.javaprojects.javeats.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
